@@ -1,0 +1,57 @@
+﻿
+
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8' />
+    <div id="calendar"></div>
+    
+    
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.js'></script>
+    <script>
+        var jsonObj = @Html.Raw(Json.Serialize(ViewBag.Result));
+
+         
+     
+        document.addEventListener('DOMContentLoaded', function () {
+           
+
+
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                selectable: true,
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek'
+                },
+                initialDate: '2023-03-12',
+                businessHours: true, // display business hours
+                editable: true,
+
+                events: jsonObj ,
+                select: function(start, end ) {
+                    var title = prompt("Class Title: ");
+                    var eventData;
+                    if (title) {
+                        eventData = {
+                            title: title,
+                            start: start,
+                            end: end
+                        };
+               
+                    }
+
+                }
+            });
+
+            calendar.render();
+        });
+
+    </script>
+</head>
+<body>
+    <div id='calendar'></div>
+</body>
+</html>
