@@ -10,8 +10,10 @@ namespace Fitness__Project.Models
         public string title { get; set; }
         public DateTime start { get; set; }
         public DateTime end { get; set; }
-        public List<Member>? memberList { get; set; }
 
         public string status { get; set; }
+
+
+        //public ICollection<ClassMember> ClassMembers { get; set; }
     }
 }

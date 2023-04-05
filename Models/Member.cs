@@ -23,5 +23,7 @@ namespace Fitness__Project.Models
         [Required(ErrorMessage = "Please choose you birthday.")]
         [Column(TypeName = "Date")]
         public DateTime birthday { get; set; }
+
+       // public ICollection<ClassMember> ClassMembers { get; set; }
     }
 }

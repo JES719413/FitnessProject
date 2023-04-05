@@ -9,12 +9,12 @@
     
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.js'></script>
     <script>
-        var jsonObj = @Html.Raw(Json.Serialize(ViewBag.Result));
 
-         
-     
+
+
+
         document.addEventListener('DOMContentLoaded', function () {
-           
+
 
 
             var calendarEl = document.getElementById('calendar');
@@ -24,26 +24,89 @@
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'dayGridMonth,timeGridWeek'
+                    right: 'timeGridWeek'
                 },
-                initialDate: '2023-03-12',
+                initialDate: '2023-04-05',
+                defaultView: 'timeGridWeek',
                 businessHours: true, // display business hours
                 editable: true,
+                
+                events: [
+                    {
+                        groupId: 'essenstial1',
+                        daysOfWeek: ['1', '2', '3', '4', '5'],
+                        title: "Essentials",
+                        startTime: "10:30:00",
+                        endTime: "11:20:00"
+                    },
+                    {
+                        groupId: 'fullBody1',
+                        daysOfWeek: ['1', '2', '3', '4', '5'],
+                        title: "Full Body",
+                        startTime: "7:30:00",
+                        endTime: "8:20:00"
+                    },
 
-                events: jsonObj ,
-                select: function(start, end ) {
-                    var title = prompt("Class Title: ");
-                    var eventData;
-                    if (title) {
-                        eventData = {
-                            title: title,
-                            start: start,
-                            end: end
-                        };
-               
-                    }
+                    {
+                        groupId: 'fullBody2',
+                        daysOfWeek: ['1', '2', '3', '4', '5'],
+                        title: "Full Body",
+                        startTime: "9:30:00",
+                        endTime: "10:20:00"
+                    },
+                    {
+                        groupId: 'fullBody3',
+                        daysOfWeek: ['1', '2', '3', '4', '5'],
+                        title: "Full Body",
+                        startTime: "11:30:00",
+                        endTime: "12:20:00"
+                    },
+                    {
+                        groupId: 'essenstial2',
+                        daysOfWeek: ['1', '2', '3', '4', '5'],
+                        title: "Essentials",
+                        startTime: "12:30:00",
+                        endTime: "13:20:00"
+                    },
+                    {
+                        groupId: 'fullBody4',
+                        daysOfWeek: ['1', '2', '3', '4', '5'],
+                        title: "Full Body",
+                        startTime: "17:30:00",
+                        endTime: "18:20:00"
+                    },
+                    {
+                        groupId: 'fullBody3',
+                        daysOfWeek: ['1', '2', '3', '4', '5'],
+                        title: "Essentials",
+                        startTime: "18:30:00p",
+                        endTime: "19:20:00p"
+                    },
+                    {
+                        groupId: 'fullBody1',
+                        daysOfWeek: ['1', '2', '3', '4', '5'],
+                        title: "Full Body",
+                        startTime: "8:30:00",
+                        endTime: "9:20:00"
+                    },
 
+
+                ],
+
+                eventClick: function(info){
+                    var eventTitle = info.event.title;
+                    var eventStart = info.event.start;
+                    var eventEnd = info.event.end;
+                    
+
+                    console.log(eventTitle + eventStart);
                 }
+               
+
+
+
+
+
             });
 
             calendar.render();
