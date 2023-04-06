@@ -14,6 +14,7 @@ namespace Fitness__Project.Data
         public DbSet<_15_Day> _15_Days { get; set; }
         public DbSet<_10_Day> _10_Days { get; set; }
         public DbSet<_8_Day> _8_Days { get; set; }
+        public DbSet<ClassMember> classMembers { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
