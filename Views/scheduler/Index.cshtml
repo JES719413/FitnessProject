@@ -7,7 +7,7 @@
     <div id="calendar"></div>
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.js'></script>
     <script>
 
@@ -28,7 +28,6 @@
                     right: 'timeGridWeek'
                 },
                 initialDate: '2023-04-05',
-                defaultView: 'timeGridWeek',
                 businessHours: true, // display business hours
                 editable: true,
                 
@@ -109,12 +108,9 @@
                             title: eventTitle,
                             start: eventStart
                         },
-                        success: function(result) {
-
-                        },
-                        error: function(xhr, status, error) {
-
-                        }
+                        complete: function(data) {
+                            window.alert(data.responseJSON.message);
+                        }                                             
                     });
     
 

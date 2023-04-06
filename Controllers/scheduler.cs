@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.Intrinsics.X86;
 using System.Diagnostics;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Fitness__Project.Controllers
 {
@@ -31,35 +32,42 @@ namespace Fitness__Project.Controllers
             return View();
         }
 
-
-        public IActionResult JoinClass(string title, string start)
+        [HttpPost]
+        public async Task<IActionResult> JoinClass(string title, string start)
         {
-            // List<ClassMember> classMembers = new List<ClassMember>();
+           
 
             ClassMember newMember = new ClassMember();
 
 
+            string message = string.Empty;
 
-
-            //var classNum = (from B1 in _context.classMembers
-              //              where B1.startTime == start
-               //            select B1).Count();
+            var classNum = (from B1 in _context.classMembers
+                          where B1.startTime == start
+                           select B1).Count();
                             
-           /// if (classNum <= 10) 
-          //  {
+            if (classNum <= 10) 
+           {
                 newMember.ClassName = title;
                 newMember.startTime = start;
                 newMember.memberId = User.Identity.Name;
 
 
                 _context.classMembers.Add(newMember);
+                await _context.SaveChangesAsync();
 
-           // }
-
+                message = "Class Joined";
+               
+            }
+            else
+            {
+                message = "Class Full";
+                
+            }
            
 
 
-            return View();
+            return Json(new { message = message});
         }
         
     
