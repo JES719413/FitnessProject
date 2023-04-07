@@ -1,0 +1,30 @@
+﻿
+<h1>Class Members</h1>
+
+@if (ViewBag.Members != null)
+{
+    <table>
+        <thead>
+            <tr>
+                <th>@ViewBag.Title</th>
+                <th>@ViewBag.Start</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var member in ViewBag.Members)
+            {
+                <tr>
+                    <td>@member.memberId</td>
+                    
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No members found for this class.</p>
+}
+
+

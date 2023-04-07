@@ -5,7 +5,7 @@
 <head>
     <meta charset='utf-8' />
     <div id="calendar"></div>
-    
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.js'></script>
     <script>
@@ -29,7 +29,7 @@
                 initialDate: '2023-04-05',
                 businessHours: true, // display business hours
                 editable: true,
-                
+
                 events: [
                     {
                         groupId: 'essenstial1',
@@ -92,13 +92,15 @@
 
                 ],
 
-                eventClick: function(info){
+                eventClick: function (info) {
                     var eventTitle = info.event.title;
                     var eventStart = info.event.start;
                     var eventEnd = info.event.end;
-                    
 
-                    console.log(eventTitle + eventStart);
+
+
+
+
 
                     $.ajax({
                         type: "POST",
@@ -107,16 +109,24 @@
                             title: eventTitle,
                             start: eventStart
                         },
-                        complete: function(data) {
-                            window.alert(data.responseJSON.message);
-                        }                                             
+                        complete: function (data) {
+                            if (data.responseJSON.message != "") {
+                                window.alert(data.responseJSON.message);
+                            }
+                            else {
+                                window.location.href = data.responseJSON.redirectToUrl;
+                            }
+                        }
                     });
-    
+
+
+
+
 
 
 
                 }
-               
+
 
 
 
