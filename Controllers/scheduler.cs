@@ -59,8 +59,6 @@ namespace Fitness__Project.Controllers
             else
             {
 
-
-
                 ClassMember newMember = new ClassMember();
 
 
@@ -88,8 +86,6 @@ namespace Fitness__Project.Controllers
                     message = "Class Full";
 
                 }
-
-
 
                 return Json(new { message = message });
             }
