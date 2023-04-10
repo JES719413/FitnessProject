@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Fitness__Project.Data;
 using Fitness__Project.Models;
+using System.Security.Principal;
 
 namespace Fitness__Project.Controllers
 {
@@ -60,6 +61,16 @@ namespace Fitness__Project.Controllers
         {
             if (ModelState.IsValid)
             {
+                var isMember = (from B1 in _context.Memberships
+                                where B1.email == User.Identity.Name
+                                select B1).Count();
+                if(isMember == 1) 
+                    {
+                    TempData["IsMember"] = "You are already a member.";
+
+                    return View();
+                    } 
+                
                 _context.Add(membership);
                 await _context.SaveChangesAsync();
                

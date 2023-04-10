@@ -51,13 +51,57 @@ namespace Fitness__Project.Controllers
                 var serializedMembers = JsonConvert.SerializeObject(classMembers);
                 string message = string.Empty;
 
-                
+
                 return Json(new { redirectToUrl = Url.Action("DisplayClassMember", "scheduler", new { title = title, start = start, members = serializedMembers }), message = message });
 
-               
+
             }
             else
             {
+                //Pulls membership type
+                var membershipType = (from B1 in _context.Memberships
+                                      where B1.email == User.Identity.Name
+                                      select B1.membershipType);
+                //converts query to string
+                string membershipTypeS = membershipType.SingleOrDefault();
+
+                // pulls classes register of user
+                var classCount = (from B1 in _context.classMembers
+                                  where B1.memberId == User.Identity.Name
+                                  select B1).Count();
+                
+                //Check if user is in the class
+                var isInClass = await _context.classMembers
+                    .Where(cm => cm.memberId == User.Identity.Name && cm.startTime == start)
+                    .CountAsync();
+
+
+                if (isInClass == 1)
+                {
+                    string messages = "You have already joined this class.";
+
+                    return Json(new { message = messages });
+                }
+
+                if (membershipTypeS == "8-Day" && classCount >= 8)
+                {
+                    string messages = "Classes used. Please upgrade memberships if you would like to take more classes.";
+
+                    return Json(new { message = messages });
+                } 
+                else if (membershipTypeS == "10-Day" && classCount >= 10)
+                {
+                    string messages = "Classes used. Please upgrade memberships if you would like to take more classes.";
+
+                    return Json(new { message = messages });
+                } else if (membershipTypeS == "15-Day" && classCount >= 15)
+                {
+                    string messages = "Classes used. Please upgrade memberships if you would like to take more classes.";
+
+                    return Json(new { message = messages });
+                }
+
+
 
                 ClassMember newMember = new ClassMember();
 
@@ -89,6 +133,7 @@ namespace Fitness__Project.Controllers
 
                 return Json(new { message = message });
             }
+        
         }
 
         public IActionResult DisplayClassMember(string title, string start, string members)
