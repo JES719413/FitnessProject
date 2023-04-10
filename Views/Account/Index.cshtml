@@ -1,0 +1,30 @@
+﻿<h1>Class Members</h1>
+
+@if (ViewBag.ClassList != null)
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Class Name</th>
+                <th>Class Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var classMember in ViewBag.ClassList)
+            {
+                <tr>
+                    <td>@classMember.className</td>
+                    <td>@classMember.classTime</td>
+
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No classes found.</p>
+}
+
+

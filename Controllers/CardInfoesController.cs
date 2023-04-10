@@ -62,9 +62,9 @@ namespace Fitness__Project.Controllers
             {
                 _context.Add(cardInfo);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                
             }
-            return View(cardInfo);
+            return RedirectToAction("Index", "Account", new { area = "" });
         }
 
         // GET: CardInfoes/Edit/5
