@@ -1,12 +1,54 @@
-﻿<h1>Class Members</h1>
+﻿<style>
+    table {
+        border-collapse: collapse;
+        font-family: Tahoma, Geneva, sans-serif;
+    }
+
+        table td {
+            padding: 15px;
+        }
+
+        table thead tr {
+            background-color: #494F56;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 13px;
+            border: 1px solid #494F56;
+        }
+
+        table tbody td {
+            color: #605D5D;
+            border: 1px solid #D7DADC;
+        }
+
+        table tbody tr {
+            background-color: #F1F1F2
+        }
+
+            table tbody tr:nth-child(odd) {
+                background-color: #ffffff;
+            }
+</style>
+<div class="container">
+    <div class="row">
+<div class="col">
+<h2>My Account</h2> <br/> 
+@*<h5>@ViewBag.User</h5><br />*@
+<h5>MemberShip: @ViewBag.Membership</h5>
+<h5>Status: @ViewBag.Status</h5>
+<h5>Start Date: @ViewBag.StartDate</h5>
+</div>
+
+    <div class="col-6">
+<h2>Your Classes</h2>
 
 @if (ViewBag.ClassList != null)
 {
     <table>
         <thead>
             <tr>
-                <th>Class Name</th>
-                <th>Class Time</th>
+                <th class="Table">Class Name</th>
+                <th class="Table">Class Time</th>
             </tr>
         </thead>
         <tbody>
@@ -14,17 +56,25 @@
             {
                 <tr>
                     <td>@classMember.className</td>
-                    <td>@classMember.classTime</td>
+                    <td>@classMember.classTime.Substring(0, classMember.classTime.LastIndexOf('G'))</td>
 
 
                 </tr>
             }
         </tbody>
     </table>
+
+
+
+
+
+
+
 }
 else
 {
     <p>No classes found.</p>
 }
-
-
+</div>
+</div>
+</div>

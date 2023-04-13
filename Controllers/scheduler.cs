@@ -28,12 +28,8 @@ namespace Fitness__Project.Controllers
 
         public IActionResult Index()
         {
-            var result = _context.Classes.ToArrayAsync();
-            ViewBag.Result = result;
-
-
-
-
+           
+           
 
             return View();
         }

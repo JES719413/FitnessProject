@@ -70,6 +70,7 @@ namespace Fitness__Project.Controllers
 
                     return View();
                     } 
+                membership.startDate = DateTime.Now;
                 
                 _context.Add(membership);
                 await _context.SaveChangesAsync();

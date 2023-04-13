@@ -1,4 +1,5 @@
 ﻿using Microsoft.Build.Framework;
+using System.ComponentModel;
 
 namespace Fitness__Project.Models
 {
@@ -6,9 +7,11 @@ namespace Fitness__Project.Models
     {
 
         public string membershipID { get; set; }
-
-        public DateTime startDate { get; set; }
-
+        [DisplayName("Start Date")]
+        [Required]
+        public new DateTime startDate { get; set; }
+        [DisplayName("Status")]
+        [Required]
         public string status { get; set; }
         [Required]
         public string membershipType { get; set; }

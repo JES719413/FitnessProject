@@ -62,7 +62,7 @@ namespace Fitness__Project.Controllers
             {
                 _context.Add(cardInfo);
                 await _context.SaveChangesAsync();
-                
+                return RedirectToAction("Index", "Account", new { area = "" });
             }
             return RedirectToAction("Index", "Account", new { area = "" });
         }
