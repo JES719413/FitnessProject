@@ -74,7 +74,22 @@ namespace Fitness__Project.Controllers
                 
                 _context.Add(membership);
                 await _context.SaveChangesAsync();
-               
+               if(membership.membershipType == "8-Day")
+                {
+                    TempData["Price"] = "$99";
+                }
+                else if (membership.membershipType == "10-Day")
+                {
+                    TempData["Price"] = "$150";
+                }
+                else if (membership.membershipType == "15-Day")
+                {
+                    TempData["Price"] = "$200";
+                }
+                else if (membership.membershipType == "Unlimited")
+                {
+                    TempData["Price"] = "$300";
+                }
             }
             return RedirectToAction("Create", "CardInfoes", new { area = "" });
         }

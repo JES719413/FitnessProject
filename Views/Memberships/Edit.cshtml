@@ -13,27 +13,6 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="membershipID" class="control-label"></label>
-                <input asp-for="membershipID" class="form-control" />
-                <span asp-validation-for="membershipID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="startDate" class="control-label"></label>
-                <input asp-for="startDate" class="form-control" />
-                <span asp-validation-for="startDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="status" class="control-label"></label>
-                <input asp-for="status" class="form-control" />
-                <span asp-validation-for="status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="membershipType" class="control-label"></label>
-                <input asp-for="membershipType" class="form-control" />
-                <span asp-validation-for="membershipType" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="MemberId" />
-            <div class="form-group">
                 <label asp-for="firstName" class="control-label"></label>
                 <input asp-for="firstName" class="form-control" />
                 <span asp-validation-for="firstName" class="text-danger"></span>
@@ -44,14 +23,38 @@
                 <span asp-validation-for="lastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="email" class="control-label"></label>
-                <input asp-for="email" class="form-control" />
-                <span asp-validation-for="email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="birthday" class="control-label"></label>
                 <input asp-for="birthday" class="form-control" />
                 <span asp-validation-for="birthday" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="membershipType" class="control-label"></label>
+                <select class="form-control" asp-for="membershipType" id="membershipType" name="membershipType">
+                    <option>Select Membership</option>
+                    <option value="Unlimited">Unlimited</option>
+                    <option value="15-Day">15-Day</option>
+                    <option value="10-Day">10-Day</option>
+                    <option value="8-Day">8-Day</option>
+                </select>
+                <span asp-validation-for="membershipType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="email" class="form-control" type="hidden" value="@Model.email"/>
+            </div>
+            <div class="form-group">
+                <input asp-for="membershipID" class="form-control" type="hidden" value="@User.Identity.Name"/>
+            </div>
+            <div class="form-group">
+                <input asp-for="startDate" class="form-control" type="hidden" value="@Model.startDate"/>
+            </div>
+            <div class="form-group">
+                <input asp-for="startDate" class="form-control" type="hidden" />
+            </div>
+            <div class="form-group">
+                <input asp-for="status" class="form-control" type="hidden" value="@Model.status" />
+            </div>
+            <div class="form-group">
+                <input asp-for="MemberId" class="form-control" type="hidden" value="@Model.MemberId" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

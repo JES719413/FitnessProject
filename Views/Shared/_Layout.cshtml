@@ -4,9 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Fitness__Project</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" >
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Fitness__Project.styles.css" asp-append-version="true" />
+    
 </head>
 <body>
     <header>
@@ -20,25 +22,19 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index"><i class="fa-solid fa-house"></i>&nbsp;Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Memberships" asp-action="Index"><i class="fa-solid fa-users"></i>&nbsp;Memberships</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Memberships" asp-action="Index">Memberships</a>
-                        </li>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="CardInfoes" asp-action="Index"><i class="fa-regular fa-credit-card"></i>&nbsp;Card Info</a>
+                        </li>                       
+                        <li class="nav-item">                           
+                            <a class="nav-link text-dark" asp-area="" asp-controller="scheduler" asp-action="Index"><i class="fa-solid fa-calendar-days">&nbsp;</i>Schedule</a>
+                        </li>     
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="CardInfoes" asp-action="Index">Card Info</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="CardInfoes" asp-action="Index">Cards</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="scheduler" asp-action="Index">Schedule</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Classes" asp-action="Index">Classes</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Index"><i class="fa-regular fa-user"></i>&nbsp;Account</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />

@@ -14,6 +14,7 @@ namespace Fitness__Project.Models
         [Required]
         public string status { get; set; }
         [Required]
+        [DisplayName("Membership Type")]
         public string membershipType { get; set; }
     }
 }
