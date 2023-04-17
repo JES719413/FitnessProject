@@ -106,7 +106,14 @@ namespace Fitness__Project.Controllers
                     }
 
                 }
-                return RedirectToAction("Create", "CardInfoes", new { area = "" });
+                if (User.IsInRole("Admin"))
+                {
+                    return RedirectToAction("Index", "Account", new { area = "" });
+                }else
+                {
+                    return RedirectToAction("Create", "CardInfoes", new { area = "" });
+                }
+               
             } catch
             {
                 return Problem("A error occurred while proccessing the request.");
