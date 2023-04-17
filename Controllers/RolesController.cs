@@ -2,9 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using Fitness__Project.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace Fitness__Project.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class RolesController : Controller
     {
         private RoleManager<IdentityRole> roleManager;

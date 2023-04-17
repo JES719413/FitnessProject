@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Fitness__Project.Data;
 using Fitness__Project.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Fitness__Project.Controllers
 {
@@ -20,6 +21,7 @@ namespace Fitness__Project.Controllers
         }
 
         // GET: CardInfoes
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
               return _context.cardInfo != null ? 
@@ -28,21 +30,28 @@ namespace Fitness__Project.Controllers
         }
 
         // GET: CardInfoes/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.cardInfo == null)
+            try
             {
-                return NotFound();
-            }
+                if (id == null || _context.cardInfo == null)
+                {
+                    return NotFound();
+                }
 
-            var cardInfo = await _context.cardInfo
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (cardInfo == null)
+                var cardInfo = await _context.cardInfo
+                    .FirstOrDefaultAsync(m => m.Id == id);
+                if (cardInfo == null)
+                {
+                    return NotFound();
+                }
+
+                return View(cardInfo);
+            }catch
             {
-                return NotFound();
+                return Problem("A error occurred while proccessing the request.");
             }
-
-            return View(cardInfo);
         }
 
         // GET: CardInfoes/Create
@@ -56,31 +65,78 @@ namespace Fitness__Project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,cardNum,expDate,zipCode")] CardInfo cardInfo)
+        public async Task<IActionResult> Create([Bind("Id,cardNum,expDate,zipCode,memberID")] CardInfo cardInfo)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(cardInfo);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Account", new { area = "" });
+                if (ModelState.IsValid)
+                {
+
+                    _context.Add(cardInfo);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index", "Account", new { area = "" });
+                }
+                else
+                {
+                    Membership? member = (from B1 in _context.Memberships
+                                         where B1.email == User.Identity.Name
+                                         select B1).SingleOrDefault();
+
+                    if (member != null)
+                    {
+                        member.status = "Inactive";
+                        _context.Update(member);
+                        await _context.SaveChangesAsync();
+                    }
+
+                    return RedirectToAction("Index", "Account", new { area = "" });
+                }
+            } catch
+            {
+                return Problem("A error occurred while proccessing the request.");
             }
-            return RedirectToAction("Index", "Account", new { area = "" });
+
+            
+
+            
         }
 
         // GET: CardInfoes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.cardInfo == null)
+            if (User.IsInRole("Admin"))
             {
-                return NotFound();
-            }
+                if (id == null || _context.cardInfo == null)
+                {
+                    return NotFound();
+                }
 
-            var cardInfo = await _context.cardInfo.FindAsync(id);
-            if (cardInfo == null)
-            {
-                return NotFound();
+                var cardInfo = await _context.cardInfo.FindAsync(id);
+                if (cardInfo == null)
+                {
+                    return NotFound();
+                }
+                return View(cardInfo);
             }
-            return View(cardInfo);
+            else
+            {
+
+                if (_context.cardInfo == null)
+                {
+                    return NotFound();
+                }
+                int Ids = (from B1 in _context.cardInfo
+                           where B1.memberID == User.Identity.Name
+                           select B1.Id).FirstOrDefault();
+
+
+                var cardInfo = await _context.cardInfo.FindAsync(Ids);
+                if (cardInfo == null)
+                {
+                    return NotFound();
+                }
+                return View(cardInfo);
+            }
         }
 
         // POST: CardInfoes/Edit/5
@@ -88,7 +144,7 @@ namespace Fitness__Project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,cardNum,expDate,zipCode")] CardInfo cardInfo)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,cardNum,expDate,zipCode,memberID")] CardInfo cardInfo)
         {
             if (id != cardInfo.Id)
             {
@@ -113,9 +169,9 @@ namespace Fitness__Project.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Account", new { area = "" });
             }
-            return View(cardInfo);
+            return RedirectToAction("Index", "Account", new { area = "" });
         }
 
         // GET: CardInfoes/Delete/5
@@ -140,19 +196,25 @@ namespace Fitness__Project.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.cardInfo == null)
+        {try
             {
-                return Problem("Entity set 'ApplicationDbContext.cardInfo'  is null.");
+                if (_context.cardInfo == null)
+                {
+                    return Problem("Entity set 'ApplicationDbContext.cardInfo'  is null.");
+                }
+                var cardInfo = await _context.cardInfo.FindAsync(id);
+                if (cardInfo != null)
+                {
+                    _context.cardInfo.Remove(cardInfo);
+                }
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            var cardInfo = await _context.cardInfo.FindAsync(id);
-            if (cardInfo != null)
+            catch
             {
-                _context.cardInfo.Remove(cardInfo);
+                return Problem("A error occurred while proccessing the request.");
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
         private bool CardInfoExists(int id)

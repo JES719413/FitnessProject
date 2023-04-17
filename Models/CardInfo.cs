@@ -10,6 +10,8 @@ namespace Fitness__Project.Models
     {
         [Key]
         public int Id { get; set; }
+        [Column(TypeName = "varchar(75)")]
+        public string memberID { get; set; }
 
         [Required(ErrorMessage = "Please enter your card number.")]
         [DisplayName("Card Number")]

@@ -22,22 +22,15 @@ namespace Fitness__Project.Controllers
             _userManager = userMrg;
         }
 
-
-
-
-
         public IActionResult Index()
         {
-           
-           
-
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> JoinClass(string title, string start)
         {
-
+    
             if (User.IsInRole("Admin"))
             {
                 var classMembers = await (from B1 in _context.classMembers
@@ -59,7 +52,7 @@ namespace Fitness__Project.Controllers
                                       where B1.email == User.Identity.Name
                                       select B1.membershipType);
                 //converts query to string
-                string membershipTypeS = membershipType.SingleOrDefault();
+                string? membershipTypeS = membershipType.SingleOrDefault();
 
                 // pulls classes register of user
                 var classCount = (from B1 in _context.classMembers
@@ -132,19 +125,47 @@ namespace Fitness__Project.Controllers
         
         }
 
-        public IActionResult DisplayClassMember(string title, string start, string members)
+        public async Task<IActionResult> DisplayClassMember(string title, string start, string members)
         {
-            ViewBag.Title = title;
-            ViewBag.Start = start;
+            if (members == null)
+            {
+                List<ClassMember> classMembers = await (from B1 in _context.classMembers
+                                   where B1.startTime == start
+                                   select B1).ToListAsync();
+                ViewBag.Title = title;
+                ViewBag.Start = start;
+                ViewBag.Members = classMembers;
+                return View();
+            }
+            else
+            {
+
+                ViewBag.Title = title;
+                ViewBag.Start = start;
 
 
-            var classMembers = JsonConvert.DeserializeObject<List<ClassMember>>(members);
+                var classMembers = JsonConvert.DeserializeObject<List<ClassMember>>(members);
 
-            ViewBag.Members = classMembers;
+                ViewBag.Members = classMembers;
 
-            return View();
+                return View();
+            }
         }
+        public async Task<IActionResult> Delete(int id, string title, string start, string members)
+        {
+            var classMember = await _context.classMembers.FindAsync(id);
 
+            if (classMember == null)
+            {
+                return NotFound();
+            }
+
+            _context.classMembers.Remove(classMember);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("DisplayClassMember", new { title = title, start = start, members = members});
+
+        }
 
     }
 }

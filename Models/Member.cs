@@ -12,15 +12,15 @@ namespace Fitness__Project.Models
         [Required(ErrorMessage = "Please enter your first name.")]
         [DisplayName("First Name")]
         [Column(TypeName = "varchar(75)")]
-        public string firstName { get; set; }
+        public string? firstName { get; set; }
         [Required(ErrorMessage = "Please enter your last name.")]
         [DisplayName("Last Name")]
         [Column(TypeName = "varchar(75)")]
-        public string lastName { get; set; }
+        public string? lastName { get; set; }
         [Required(ErrorMessage = "Please enter your email.")]
         [DisplayName("Email")]
         [Column(TypeName = "varchar(75)")]
-        public string email { get; set; }
+        public string? email { get; set; }
         
         //[Column(TypeName = "Date")]
         //public new DateTime startDate { get; set; }

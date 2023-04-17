@@ -1,4 +1,5 @@
-﻿<style>
+﻿
+<style>
     table {
         border-collapse: collapse;
         font-family: Tahoma, Geneva, sans-serif;
@@ -20,7 +21,7 @@
             color: #605D5D;
             border: 1px solid #D7DADC;
         }
-         
+
         table tbody tr {
             background-color: #F1F1F2
         }
@@ -31,51 +32,93 @@
 </style>
 <div class="container">
     <div class="row">
-<div class="col">
-<h2>My Account</h2> <br/> 
-<h5>Name: @ViewBag.FirstName @ViewBag.LastName</h5><br />
-<h5>Membership: @ViewBag.Membership</h5> <a asp-action="Edit" asp-controller="Memberships" asp-route-id="@ViewBag.ID">Change Membership</a>
-<h5>Status: @ViewBag.Status</h5>
-<h5>Start Date: @ViewBag.StartDate</h5>
-</div>
+        <div class="col">
+            <h2>My Account</h2>
+            <div class="card mb-4">
+                <div class="card-body">                   
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <h5 class="mb-0">Name: </h5>
+                        </div>
+                        <div class="col-sm-9">
+                            <h5>@ViewBag.FirstName @ViewBag.LastName</h5>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <h5 class="mb-0">Membership: </h5>
+                        </div>
+                        <div class="col-sm-9">
+                            <h5>@ViewBag.Membership&nbsp;</h5>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <h5 class="mb-0">Status: </h5>
+                        </div>
+                        <div class="col-sm-9">
+                            <h5>@ViewBag.Status</h5>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <h5 class="mb-0">Start Date: </h5>
+                        </div>
+                        <div class="col-sm-9">
+                            <h5>@ViewBag.StartDate</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    <div class="col-6">
-<h2>Your Classes</h2>
 
-@if (ViewBag.ClassList != null)
-{
-    <table>
-        <thead>
-            <tr>
-                <th class="Table">Class Name</th>
-                <th class="Table">Class Time</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var classMember in ViewBag.ClassList)
+
+
+
+            
+            <a asp-action="Edit" asp-controller="Memberships" asp-route-id="@ViewBag.ID" class="btn btn-primary">Change Membership</a>  &nbsp;&nbsp;&nbsp;&nbsp;
+            <a asp-action="Edit" asp-controller="CardInfoes" class="btn btn-primary">Change Payment Information</a>
+        </div>
+
+        <div class="col-6">
+            <h2>Your Classes</h2>
+
+            @if (ViewBag.ClassList != null)
             {
-                <tr>
-                    <td>@classMember.className</td>
-                    <td>@classMember.classTime.Substring(0, classMember.classTime.LastIndexOf('G'))</td>
-                                <td><a asp-action="Delete" asp-controller="Account" asp-route-id="@classMember.ID" class="btn btn-danger">Leave Class</a></td>
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="Table">Class Name</th>
+                            <th class="Table">Class Time</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var classMember in ViewBag.ClassList)
+                        {
+                            
+                                <tr>
+                                    <td>@classMember.className</td>
+                                    <td>@classMember.classTime.Substring(0, classMember.classTime.LastIndexOf('G'))</td>
+                                    <td><a asp-action="Delete" asp-controller="Account" asp-route-id="@classMember.ID" class="btn btn-danger">Leave Class</a></td>
 
-                </tr>
+                                </tr>                            
+                            
+                        }
+                    </tbody>
+                </table>
+
+
+
+
+
+
+
             }
-        </tbody>
-    </table>
-
-
-
-
-
-
-
-}
-else
-{
-    <p>No classes found.</p>
-}
-</div>
-</div>
+            
+        </div>
+    </div>
 </div>

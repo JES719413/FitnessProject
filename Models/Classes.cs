@@ -14,6 +14,6 @@ namespace Fitness__Project.Models
         public string status { get; set; }
 
 
-        //public ICollection<ClassMember> ClassMembers { get; set; }
+        
     }
 }

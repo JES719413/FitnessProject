@@ -38,9 +38,11 @@ namespace Fitness__Project.Controllers
             var membershipID = (from B1 in _context.Memberships
                                 where B1.email == User.Identity.Name
                                 select B1.MemberId);
+            string? memberId = (from B1 in _context.Memberships
+                            where B1.email == User.Identity.Name
+                            select B1.email).SingleOrDefault();
 
-
-            string firstName = (from B1 in _context.Memberships
+            string? firstName = (from B1 in _context.Memberships
                         where B1.email == User.Identity.Name
                         select B1.firstName).SingleOrDefault();
             var lastName = (from B1 in _context.Memberships
@@ -49,12 +51,12 @@ namespace Fitness__Project.Controllers
             int membershipIDs = membershipID.SingleOrDefault();
 
 
-            string membershipType = membership.SingleOrDefault();
-            string Status = status.SingleOrDefault();
+            string? membershipType = membership.SingleOrDefault();
+            string? Status = status.SingleOrDefault();
             DateTime StartDate = startDate.SingleOrDefault();
 
-            
 
+            ViewBag.MemberID = memberId;
             ViewBag.Status = Status;
             ViewBag.StartDate = StartDate;
             ViewBag.Membership = membershipType;

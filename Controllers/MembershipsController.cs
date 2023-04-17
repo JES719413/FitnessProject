@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Fitness__Project.Data;
 using Fitness__Project.Models;
 using System.Security.Principal;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Fitness__Project.Controllers
 {
@@ -21,29 +22,40 @@ namespace Fitness__Project.Controllers
         }
 
         // GET: Memberships
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
-              return _context.Memberships != null ? 
-                          View(await _context.Memberships.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Memberships'  is null.");
+            return _context.Memberships != null ?
+                        View(await _context.Memberships.ToListAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.Memberships'  is null.");
         }
 
         // GET: Memberships/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Memberships == null)
+            try
             {
-                return NotFound();
-            }
+                if (id == null || _context.Memberships == null)
+                {
+                    return NotFound();
+                }
 
-            var membership = await _context.Memberships
-                .FirstOrDefaultAsync(m => m.MemberId == id);
-            if (membership == null)
+                var membership = await _context.Memberships
+                    .FirstOrDefaultAsync(m => m.MemberId == id);
+                if (membership == null)
+                {
+                    return NotFound();
+                }
+
+                return View(membership);
+            }
+            catch
             {
-                return NotFound();
+                
+                Problem("A error occurred while proccessing the request.");
+                return View("Index", "Account");
             }
-
-            return View(membership);
         }
 
         // GET: Memberships/Create
@@ -59,41 +71,48 @@ namespace Fitness__Project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("membershipID,startDate,status,membershipType,MemberId,firstName,lastName,email,birthday")] Membership membership)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var isMember = (from B1 in _context.Memberships
-                                where B1.email == User.Identity.Name
-                                select B1).Count();
-                if(isMember == 1) 
+                if (ModelState.IsValid)
+                {
+                    var isMember = (from B1 in _context.Memberships
+                                    where B1.email == User.Identity.Name
+                                    select B1).Count();
+                    if (isMember == 1)
                     {
-                    TempData["IsMember"] = "You are already a member.";
+                        TempData["IsMember"] = "You are already a member.";
 
-                    return View();
-                    } 
-                membership.startDate = DateTime.Now;
-                
-                _context.Add(membership);
-                await _context.SaveChangesAsync();
-               if(membership.membershipType == "8-Day")
-                {
-                    TempData["Price"] = "$99";
+                        return View();
+                    }
+                    membership.startDate = DateTime.Now;
+
+                    _context.Add(membership);
+                    await _context.SaveChangesAsync();
+                    if (membership.membershipType == "8-Day")
+                    {
+                        TempData["Price"] = "$99";
+                    }
+                    else if (membership.membershipType == "10-Day")
+                    {
+                        TempData["Price"] = "$150";
+                    }
+                    else if (membership.membershipType == "15-Day")
+                    {
+                        TempData["Price"] = "$200";
+                    }
+                    else if (membership.membershipType == "Unlimited")
+                    {
+                        TempData["Price"] = "$300";
+                    }
+
                 }
-                else if (membership.membershipType == "10-Day")
-                {
-                    TempData["Price"] = "$150";
-                }
-                else if (membership.membershipType == "15-Day")
-                {
-                    TempData["Price"] = "$200";
-                }
-                else if (membership.membershipType == "Unlimited")
-                {
-                    TempData["Price"] = "$300";
-                }
+                return RedirectToAction("Create", "CardInfoes", new { area = "" });
+            } catch
+            {
+                return Problem("A error occurred while proccessing the request.");
             }
-            return RedirectToAction("Create", "CardInfoes", new { area = "" });
         }
-    
+
 
         // GET: Memberships/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -118,32 +137,46 @@ namespace Fitness__Project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("membershipID,startDate,status,membershipType,MemberId,firstName,lastName,email,birthday")] Membership membership)
         {
-            if (id != membership.MemberId)
+            try
             {
-                return NotFound();
-            }
+                if (id != membership.MemberId)
+                {
+                    return NotFound();
+                }
 
-            if (ModelState.IsValid)
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        _context.Update(membership);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!MembershipExists(membership.MemberId))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    if(User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }else
+                    {
+                        return RedirectToAction("Index", "Account", new { area = "" });
+                    }
+                    
+                }
+                return View(membership);
+            }catch (DbUpdateConcurrencyException)
             {
-                try
-                {
-                    _context.Update(membership);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MembershipExists(membership.MemberId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                Problem("A error occurred while proccessing the request.");
+                return View("Index", "Account");  
             }
-            return View(membership);
         }
 
         // GET: Memberships/Delete/5
@@ -178,14 +211,20 @@ namespace Fitness__Project.Controllers
             {
                 _context.Memberships.Remove(membership);
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            try
+            {
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }catch (DbUpdateConcurrencyException)
+            {
+                return Problem("A error occurred while proccessing the request.");
+                
+            }
+            }
 
         private bool MembershipExists(int id)
         {
-          return (_context.Memberships?.Any(e => e.MemberId == id)).GetValueOrDefault();
+            return (_context.Memberships?.Any(e => e.MemberId == id)).GetValueOrDefault();
         }
     }
 }
